@@ -677,6 +677,9 @@ func (h *http3Obfuscator) StreamDeobfuscate(ctx context.Context, src io.Reader, 
 	// 使用带缓冲的读取器以提高效率
 	reader := bufio.NewReader(src)
 	var totalWritten int64
+	// 使用固定大小的缓冲区进行复制（32KB，与最大分片大小对齐）
+	buf := GetBuffer(32768)
+	defer PutBuffer(buf)
 
 	for {
 		// 读取帧头部（3字节）
@@ -699,21 +702,24 @@ func (h *http3Obfuscator) StreamDeobfuscate(ctx context.Context, src io.Reader, 
 
 		// 只处理DATA帧（类型0x00）
 		if frameType == 0x00 {
-			// 读取DATA帧载荷
-			payload := GetBuffer(int(length))
-			defer PutBuffer(payload)
+			// 创建限制读取器，只读取指定长度的数据
+			limitedReader := io.LimitReader(reader, int64(length))
 
-			n, err := io.ReadFull(reader, payload[:length])
+			// 使用零拷贝复制：直接从限制读取器复制到目标写入器
+			written, err := io.CopyBuffer(dst, limitedReader, buf)
 			if err != nil {
-				return totalWritten, fmt.Errorf("读取DATA帧载荷失败: %w", err)
+				return totalWritten, fmt.Errorf("复制DATA帧载荷失败: %w", err)
 			}
 
-			// 写入解混淆后的数据
-			written, err := dst.Write(payload[:n])
-			if err != nil {
-				return totalWritten, fmt.Errorf("写入解混淆数据失败: %w", err)
+			// 检查是否读取了完整长度
+			if written != int64(length) {
+				return totalWritten, fmt.Errorf("DATA帧载荷长度不匹配：预期 %d，实际 %d", length, written)
 			}
-			totalWritten += int64(written)
+
+			totalWritten += written
+
+			// 注意：limitedReader 可能还有剩余数据，但应该已经读取完毕
+			// 确保消耗所有限制的数据（io.CopyBuffer 应该已经处理）
 		} else if frameType == 0x01 {
 			// HEADERS帧，跳过载荷
 			if _, err := reader.Discard(int(length)); err != nil {
