@@ -370,3 +370,109 @@ func BenchmarkFrameDecode(b *testing.B) {
 		_, _ = Decode(encoded)
 	}
 }
+
+func TestAckPayloadEncoding(t *testing.T) {
+	tests := []struct {
+		name       string
+		ackedBytes uint32
+		windowSize uint32
+		wantErr    bool
+	}{
+		{"正常ACK", 1024, 65535, false},
+		{"零确认", 0, 65535, false},
+		{"零窗口", 1024, 0, false},
+		{"全零", 0, 0, false},
+		{"最大值", 0xFFFFFFFF, 0xFFFFFFFF, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// 编码
+			encoded := EncodeAckPayload(tt.ackedBytes, tt.windowSize)
+
+			// 验证长度
+			if len(encoded) != 8 {
+				t.Errorf("编码长度错误: 期望 8, 得到 %d", len(encoded))
+			}
+
+			// 解码
+			decoded, err := DecodeAckPayload(encoded)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DecodeAckPayload() 错误 = %v, 期望错误 = %v", err, tt.wantErr)
+				return
+			}
+
+			if decoded.AckedBytes != tt.ackedBytes {
+				t.Errorf("解码后AckedBytes不匹配: 期望 %d, 得到 %d", tt.ackedBytes, decoded.AckedBytes)
+			}
+
+			if decoded.WindowSize != tt.windowSize {
+				t.Errorf("解码后WindowSize不匹配: 期望 %d, 得到 %d", tt.windowSize, decoded.WindowSize)
+			}
+		})
+	}
+}
+
+func TestDecodeAckPayload_InvalidLength(t *testing.T) {
+	tests := []struct {
+		name string
+		data []byte
+	}{
+		{"空数据", []byte{}},
+		{"过短", []byte{0, 0, 0, 0}},
+		{"过长", []byte{0, 0, 0, 0, 0, 0, 0, 0, 0}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := DecodeAckPayload(tt.data)
+			if err == nil {
+				t.Error("期望错误但得到nil")
+			}
+		})
+	}
+}
+
+func TestNewAckFrame(t *testing.T) {
+	streamID := uint32(123)
+	ackedBytes := uint32(1024)
+	windowSize := uint32(65535)
+
+	frame := NewAckFrame(streamID, ackedBytes, windowSize)
+
+	// 验证帧基本属性
+	if frame.Magic != FrameMagic {
+		t.Errorf("Magic错误: 期望 %#x, 得到 %#x", FrameMagic, frame.Magic)
+	}
+
+	if frame.Version != ProtocolVersion {
+		t.Errorf("Version错误: 期望 %#x, 得到 %#x", ProtocolVersion, frame.Version)
+	}
+
+	if frame.Type != TypeAck {
+		t.Errorf("Type错误: 期望 %#x, 得到 %#x", TypeAck, frame.Type)
+	}
+
+	if frame.StreamID != streamID {
+		t.Errorf("StreamID错误: 期望 %d, 得到 %d", streamID, frame.StreamID)
+	}
+
+	// 验证载荷
+	if len(frame.Payload) != 8 {
+		t.Errorf("Payload长度错误: 期望 8, 得到 %d", len(frame.Payload))
+	}
+
+	// 解码验证内容
+	ack, err := DecodeAckPayload(frame.Payload)
+	if err != nil {
+		t.Fatalf("解码ACK载荷失败: %v", err)
+	}
+
+	if ack.AckedBytes != ackedBytes {
+		t.Errorf("载荷AckedBytes不匹配: 期望 %d, 得到 %d", ackedBytes, ack.AckedBytes)
+	}
+
+	if ack.WindowSize != windowSize {
+		t.Errorf("载荷WindowSize不匹配: 期望 %d, 得到 %d", windowSize, ack.WindowSize)
+	}
+}

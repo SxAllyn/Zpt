@@ -1,0 +1,66 @@
+# Zpt-core 配置文件示例
+# 使用方式: zpt -config config.yaml
+
+log:
+  level: info
+  file: ""
+  color: true
+  timestamp: true
+
+socks5:
+  enabled: true
+  listen: "127.0.0.1:1080"
+  auth:
+    enabled: false
+    username: ""
+    password: ""
+  udp: false
+  timeout: 30
+
+tun:
+  enabled: true
+  name: "zpt0"
+  mtu: 1500
+  address: "10.0.0.1/24"
+  gateway: "10.0.0.1"
+  dns:
+    - "8.8.8.8"
+    - "1.1.1.1"
+  routes:
+    - "0.0.0.0/0"
+  enable_ipv6: false
+
+outbound:
+  type: "zop"
+  strategy: "first"
+  zop:
+    server: "127.0.0.1"
+    port: 443
+    disguise: "http3"
+    key: ""
+    compression: true
+    timeout: 30
+    tls:
+      enabled: true
+      server_name: ""
+      insecure_skip_verify: false
+      cert_file: ""
+      key_file: ""
+  groups: []
+
+routes:
+  - name: "default"
+    destination: "0.0.0.0/0"
+    outbound: "zop"
+    priority: 100
+    enabled: true
+
+advanced:
+  max_connections: 1024
+  connect_timeout: 30
+  buffer_size: 16384
+  tcp_keep_alive: true
+  tcp_keep_alive_interval: 30
+  dns_cache: true
+  dns_cache_size: 1024
+  dns_cache_expire: 300

@@ -1,0 +1,23 @@
+mode: set
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:32.29,37.2 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:40.32,44.15 3 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:44.15,46.3 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:49.2,53.36 3 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:53.36,54.39 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:54.39,56.36 2 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:56.36,58.40 2 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:58.40,60.6 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:65.2,67.12 3 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:71.31,75.16 3 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:75.16,77.3 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:80.2,80.21 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:80.21,82.3 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:85.2,88.36 2 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:88.36,89.39 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:89.39,90.41 1 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:90.41,92.5 1 0
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:96.2,98.12 3 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:102.68,106.15 3 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:106.15,107.42 1 0
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:110.2,111.40 2 1
+github.com/SxAllyn/zpt/internal/kernel/kernel.go:115.62,121.2 4 1

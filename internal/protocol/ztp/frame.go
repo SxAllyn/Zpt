@@ -57,6 +57,9 @@ const (
 
 	// FlagFinal 最后帧标志
 	FlagFinal FrameFlags = 1 << 2
+
+	// FlagLowPriority 低优先级标志
+	FlagLowPriority FrameFlags = 1 << 3
 )
 
 // Frame Ztp帧结构
@@ -342,4 +345,38 @@ func WriteFrame(w io.Writer, frame *Frame) error {
 
 	_, err = w.Write(data)
 	return err
+}
+
+// AckPayload ACK帧载荷结构
+type AckPayload struct {
+	AckedBytes uint32 // 已确认字节数
+	WindowSize uint32 // 当前窗口大小（字节）
+}
+
+// EncodeAckPayload 编码ACK载荷
+func EncodeAckPayload(ackedBytes, windowSize uint32) []byte {
+	data := make([]byte, 8)
+	binary.LittleEndian.PutUint32(data[0:4], ackedBytes)
+	binary.LittleEndian.PutUint32(data[4:8], windowSize)
+	return data
+}
+
+// DecodeAckPayload 解码ACK载荷
+func DecodeAckPayload(data []byte) (AckPayload, error) {
+	if len(data) != 8 {
+		return AckPayload{}, errors.New("ACK载荷长度必须为8字节")
+	}
+
+	return AckPayload{
+		AckedBytes: binary.LittleEndian.Uint32(data[0:4]),
+		WindowSize: binary.LittleEndian.Uint32(data[4:8]),
+	}, nil
+}
+
+// NewAckFrame 创建ACK帧
+func NewAckFrame(streamID uint32, ackedBytes, windowSize uint32) *Frame {
+	payload := EncodeAckPayload(ackedBytes, windowSize)
+	f := NewFrame(TypeAck, streamID, payload)
+	f.SetFlag(FlagPriority) // ACK帧高优先级
+	return f
 }

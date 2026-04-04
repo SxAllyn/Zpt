@@ -1,0 +1,223 @@
+=== RUN   TestZopLargeDataTransfer
+    zop_stress_test.go:121: Zop拨号器被调用: network=tcp, address=test.local:8080
+    zop_stress_test.go:200: 目标服务器: 收到拨号器调用信号
+[READ] 调用 Read, closed=false, conn=0x1932da9da0c0
+[READ-LOOP] rawBuffer=0, readBuffer=0
+[READ] 调用 Read, closed=false, conn=0x1932da622000
+[READ-LOOP] rawBuffer=0, readBuffer=0
+[WRITE] 调用 Write, len=32768, closed=false, hasSentHeaders=false
+    zop_stress_test.go:338: 客户端: 已发送 32768/131072 字节
+    zop_stress_test.go:338: 客户端: 已发送 65536/131072 字节
+    zop_stress_test.go:338: 客户端: 已发送 98304/131072 字节
+    zop_stress_test.go:338: 客户端: 已发送 131072/131072 字节
+[READ-NET] 从连接读取 32913 字节
+[WRITE] 调用 Write, len=32768, closed=false, hasSentHeaders=true
+[READ-LOOP] rawBuffer=32913, readBuffer=0
+[PROCESS-FRAMES] 开始处理传入帧, rawBuffer=32913
+[READ-FRAME] 解析帧: type=01, length=139, rawBuffer=32913
+[READ-LOOP] rawBuffer=32771, readBuffer=0
+[READ-FRAME] 解析帧: type=00, length=32768, rawBuffer=32771
+[FLOW-CTRL-DATA] 发送WINDOW_UPDATE: 增量=32768 (消费DATA帧长度=32768), 帧内容: 02 00 04 00 00 80 00 
+[FLOW-CTRL] 收到WINDOW_UPDATE: 增量=32768 (0x00008000), 窗口 104857600 -> 104890368, 载荷: 00 00 80 00 
+[FRAME-PROC] 移除WINDOW_UPDATE帧，长度=4, 增量=32768, 帧头: 02 00 04, 载荷: 00 00 80 00 
+[READ] 调用 Read, closed=false, conn=0x1932da622000
+[READ-LOOP] rawBuffer=0, readBuffer=0
+    zop_stress_test.go:319: 客户端: 已接收 32768/131072 字节
+[READ-NET] 从连接读取 32771 字节
+[WRITE-SENT] 发送 32768 字节数据, sent=65536, window=104890368, available=104824832
+[WRITE] 调用 Write, len=32768, closed=false, hasSentHeaders=true
+[PROCESS-FRAMES] 开始处理传入帧, rawBuffer=32771
+[READ-LOOP] rawBuffer=32771, readBuffer=0
+[READ-FRAME] 解析帧: type=00, length=32768, rawBuffer=32771
+[FLOW-CTRL-DATA] 发送WINDOW_UPDATE: 增量=32768 (消费DATA帧长度=32768), 帧内容: 02 00 04 00 00 80 00 
+[FLOW-CTRL] 收到WINDOW_UPDATE: 增量=32768 (0x00008000), 窗口 104890368 -> 104923136, 载荷: 00 00 80 00 
+[FRAME-PROC] 移除WINDOW_UPDATE帧，长度=4, 增量=32768, 帧头: 02 00 04, 载荷: 00 00 80 00 
+[READ] 调用 Read, closed=false, conn=0x1932da622000
+[READ-LOOP] rawBuffer=0, readBuffer=0
+    zop_stress_test.go:319: 客户端: 已接收 65536/131072 字节
+[WRITE-SENT] 发送 32768 字节数据, sent=98304, window=104923136, available=104824832
+[READ-NET] 从连接读取 32771 字节
+[WRITE] 调用 Write, len=32768, closed=false, hasSentHeaders=true
+[PROCESS-FRAMES] 开始处理传入帧, rawBuffer=0
+[READ-LOOP] rawBuffer=32771, readBuffer=0
+[READ-FRAME] 解析帧: type=00, length=32768, rawBuffer=32771
+[FLOW-CTRL-DATA] 发送WINDOW_UPDATE: 增量=32768 (消费DATA帧长度=32768), 帧内容: 02 00 04 00 00 80 00 
+[FLOW-CTRL] 收到WINDOW_UPDATE: 增量=32768 (0x00008000), 窗口 104923136 -> 104955904, 载荷: 00 00 80 00 
+[FRAME-PROC] 移除WINDOW_UPDATE帧，长度=4, 增量=32768, 帧头: 02 00 04, 载荷: 00 00 80 00 
+[READ] 调用 Read, closed=false, conn=0x1932da622000
+[READ-LOOP] rawBuffer=0, readBuffer=0
+    zop_stress_test.go:319: 客户端: 已接收 98304/131072 字节
+[READ-NET] 从连接读取 32771 字节
+[WRITE-SENT] 发送 32768 字节数据, sent=131072, window=104955904, available=104824832
+[READ-LOOP] rawBuffer=32771, readBuffer=0
+[READ-FRAME] 解析帧: type=00, length=32768, rawBuffer=32771
+[FLOW-CTRL-DATA] 发送WINDOW_UPDATE: 增量=32768 (消费DATA帧长度=32768), 帧内容: 02 00 04 00 00 80 00 
+panic: test timed out after 1m0s
+	running tests:
+		TestZopLargeDataTransfer (1m0s)
+
+goroutine 68 [running]:
+testing.(*M).startAlarm.func1()
+	D:/Program Files/Go/src/testing/testing.go:2802 +0x34b
+created by time.goFunc
+	D:/Program Files/Go/src/time/sleep.go:215 +0x2d
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0x1932da462200, {0x7ff7033a4c3c?, 0x1932da577b38?}, 0x7ff7033c1290)
+	D:/Program Files/Go/src/testing/testing.go:2109 +0x4c7
+testing.runTests.func1(0x1932da462200)
+	D:/Program Files/Go/src/testing/testing.go:2585 +0x37
+testing.tRunner(0x1932da462200, 0x1932da577c58)
+	D:/Program Files/Go/src/testing/testing.go:2036 +0xc3
+testing.runTests({0x7ff7033a3462, 0x16}, {0x7ff7033b0e0c, 0x2c}, 0x1932da46a270, {0x7ff7036d3d80, 0x10, 0x10}, {0xc26c52406761dfc4, 0xdf8668e3d, ...})
+	D:/Program Files/Go/src/testing/testing.go:2583 +0x4f0
+testing.(*M).Run(0x1932da5243c0)
+	D:/Program Files/Go/src/testing/testing.go:2443 +0x6ac
+main.main()
+	_testmain.go:76 +0x9b
+
+goroutine 7 [chan receive]:
+github.com/SxAllyn/zpt/internal/outbound/zop.TestZopLargeDataTransfer(0x1932da462400)
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:342 +0xbe5
+testing.tRunner(0x1932da462400, 0x7ff7033c1290)
+	D:/Program Files/Go/src/testing/testing.go:2036 +0xc3
+created by testing.(*T).Run in goroutine 1
+	D:/Program Files/Go/src/testing/testing.go:2101 +0x4a9
+
+goroutine 50 [IO wait]:
+internal/poll.runtime_pollWait(0x229f2c97a00, 0x72)
+	D:/Program Files/Go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0x1932da4702d0?, 0x7ff702f92bc6?, 0x0)
+	D:/Program Files/Go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*FD).waitIO(0x1932da4702d0?, 0x1932da599c90?)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:214 +0x4c
+internal/poll.(*FD).execIO(0x1932da4900e0, 0x72, 0x1932da599d00)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:297 +0x365
+internal/poll.(*FD).acceptOne(0x1932da4900e0, 0x254, {0x1932da5a4000?, 0x1932da599d9c?, 0x1932da599dc8?})
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:1118 +0x79
+internal/poll.(*FD).Accept(0x1932da4900e0, 0x1932da599ee8)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:1153 +0x190
+net.(*netFD).accept(0x1932da4900e0)
+	D:/Program Files/Go/src/net/fd_windows.go:202 +0x4b
+net.(*TCPListener).accept(0x1932da51c000)
+	D:/Program Files/Go/src/net/tcpsock_posix.go:159 +0x1b
+net.(*TCPListener).Accept(0x1932da51c000)
+	D:/Program Files/Go/src/net/tcpsock.go:387 +0x30
+github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).acceptLoop(0x1932da47f5f0)
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:82 +0x51
+created by github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).Listen in goroutine 7
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:71 +0x105
+
+goroutine 51 [select]:
+io.(*pipe).read(0x1932da520120, {0x1932daa0a000, 0x100000, 0x10000?})
+	D:/Program Files/Go/src/io/pipe.go:57 +0xa7
+io.(*PipeReader).Read(0x7ff703014a11?, {0x1932daa0a000?, 0x1a?, 0x0?})
+	D:/Program Files/Go/src/io/pipe.go:134 +0x1a
+bufio.(*Reader).Read(0x1932da9da000, {0x1932dab2a000, 0x10000, 0x0?})
+	D:/Program Files/Go/src/bufio/bufio.go:245 +0x197
+github.com/SxAllyn/zpt/internal/outbound/zop.(*bufferedConn).Read(0x10000?, {0x1932dab2a000?, 0x7ff7033af207?, 0x28?})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:68 +0x1b
+github.com/SxAllyn/zpt/internal/protocol/zop.(*http3Transport).Read(0x1932da9f4000, {0x1932da9f6000, 0x8000, 0x0?})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/protocol/zop/http3.go:220 +0x6fb
+github.com/SxAllyn/zpt/internal/outbound/zop.TestZopLargeDataTransfer.func2()
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:224 +0x2ff
+created by github.com/SxAllyn/zpt/internal/outbound/zop.TestZopLargeDataTransfer in goroutine 7
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:194 +0x3f0
+
+goroutine 52 [chan receive]:
+github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).handleRequest(0x1932da47f5f0, {0x7ff7033cffd0, 0x1932da582008})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:338 +0x785
+github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).handleConnection(0x1932da47f5f0, {0x7ff7033cffd0, 0x1932da582008})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:106 +0xa5
+created by github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).acceptLoop in goroutine 50
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:91 +0xb7
+
+goroutine 66 [IO wait]:
+internal/poll.runtime_pollWait(0x229f2c97600, 0x72)
+	D:/Program Files/Go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0x1932da470510?, 0x7ff702f92bc6?, 0x0)
+	D:/Program Files/Go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*FD).waitIO(0x7ff7036c59e0?, 0x4?)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:214 +0x4c
+internal/poll.(*FD).execIO(0x1932da4902a0, 0x72, 0x1932da595cb8)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:297 +0x365
+internal/poll.(*FD).Read(0x1932da4902a0, {0x1932dab3a000, 0x8000, 0x8000})
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:586 +0x20e
+net.(*netFD).Read(0x1932da4902a0, {0x1932dab3a000?, 0x8000?, 0x8000?})
+	D:/Program Files/Go/src/net/fd_posix.go:68 +0x25
+net.(*conn).Read(0x1932da582008, {0x1932dab3a000?, 0x1932da61c190?, 0x1932da595d98?})
+	D:/Program Files/Go/src/net/net.go:196 +0x45
+io.copyBuffer({0x229f2d19050, 0x1932da61c120}, {0x7ff7033c72a0, 0x1932da582008}, {0x0, 0x0, 0x0})
+	D:/Program Files/Go/src/io/io.go:429 +0x190
+io.Copy(...)
+	D:/Program Files/Go/src/io/io.go:388
+net.genericWriteTo(0x7ff703368da8?, {0x229f2d19050?, 0x1932da61c120?})
+	D:/Program Files/Go/src/net/net.go:796 +0x35
+net.(*TCPConn).writeTo(0x7ff703328380?, {0x229f2d19050?, 0x1932da61c120?})
+	D:/Program Files/Go/src/net/tcpsock_posix.go:61 +0x1f
+net.(*TCPConn).WriteTo(0x1932da582008, {0x229f2d19050?, 0x1932da61c120?})
+	D:/Program Files/Go/src/net/tcpsock.go:177 +0x30
+io.copyBuffer({0x229f2d19050, 0x1932da61c120}, {0x229f2d19000, 0x1932da582008}, {0x0, 0x0, 0x0})
+	D:/Program Files/Go/src/io/io.go:411 +0x9d
+io.Copy(...)
+	D:/Program Files/Go/src/io/io.go:388
+github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).handleRequest.func1()
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:327 +0x85
+created by github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).handleRequest in goroutine 52
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:326 +0x6ec
+
+goroutine 67 [select]:
+io.(*pipe).write(0x1932da5200c0, {0x1932da680000, 0x7, 0x100000})
+	D:/Program Files/Go/src/io/pipe.go:86 +0x1e5
+io.(*PipeWriter).Write(0x7ff70301492a?, {0x1932da680000?, 0x7?, 0x1932da5360c0?})
+	D:/Program Files/Go/src/io/pipe.go:161 +0x1a
+bufio.(*Writer).Flush(0x1932da51cb80)
+	D:/Program Files/Go/src/bufio/bufio.go:642 +0x52
+github.com/SxAllyn/zpt/internal/outbound/zop.(*bufferedConn).Write(0x1932da9da060, {0x1932dab70000?, 0x71?, 0x1932da5b0000?})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:77 +0x45
+github.com/SxAllyn/zpt/internal/transport.(*QUICTransport).Write(0x7ff7033c6d20?, {0x1932dab70000?, 0x7ff7033baedb?, 0x58?})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/transport/quic.go:162 +0x92
+github.com/SxAllyn/zpt/internal/protocol/zop.(*http3Transport).Read(0x1932da636000, {0x1932da646000, 0x8000, 0x7ff703001fd3?})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/protocol/zop/http3.go:166 +0xd1d
+github.com/SxAllyn/zpt/internal/outbound/zop.(*ZopConn).Read(0x1932da61c120, {0x1932da646000, 0x8000, 0x8000})
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop.go:196 +0x16a
+io.copyBuffer({0x7ff7033c72c0, 0x1932da582008}, {0x229f2e05cb8, 0x1932da61c120}, {0x0, 0x0, 0x0})
+	D:/Program Files/Go/src/io/io.go:429 +0x190
+io.Copy(...)
+	D:/Program Files/Go/src/io/io.go:388
+net.genericReadFrom(0x1932da4902a0?, {0x229f2e05cb8?, 0x1932da61c120?})
+	D:/Program Files/Go/src/net/net.go:772 +0x35
+net.(*TCPConn).readFrom(0x1932da582008, {0x229f2e05cb8, 0x1932da61c120})
+	D:/Program Files/Go/src/net/tcpsock_posix.go:54 +0x45
+net.(*TCPConn).ReadFrom(0x1932da582008, {0x229f2e05cb8?, 0x1932da61c120?})
+	D:/Program Files/Go/src/net/tcpsock.go:165 +0x30
+io.copyBuffer({0x229f2e05c98, 0x1932da582008}, {0x229f2e05cb8, 0x1932da61c120}, {0x0, 0x0, 0x0})
+	D:/Program Files/Go/src/io/io.go:415 +0x151
+io.Copy(...)
+	D:/Program Files/Go/src/io/io.go:388
+github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).handleRequest.func2()
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:333 +0x85
+created by github.com/SxAllyn/zpt/internal/inbound/socks5.(*Server).handleRequest in goroutine 52
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/inbound/socks5/socks5.go:332 +0x776
+
+goroutine 53 [IO wait]:
+internal/poll.runtime_pollWait(0x229f2c97800, 0x72)
+	D:/Program Files/Go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0x1932da57a000?, 0x7ff702f92bc6?, 0x0)
+	D:/Program Files/Go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*FD).waitIO(0x7ff7036c59e0?, 0x7ff7030926f7?)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:214 +0x4c
+internal/poll.(*FD).execIO(0x1932da4901c0, 0x72, 0x1932da5afe28)
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:297 +0x365
+internal/poll.(*FD).Read(0x1932da4901c0, {0x1932dab5a000, 0x8000, 0x8000})
+	D:/Program Files/Go/src/internal/poll/fd_windows.go:586 +0x20e
+net.(*netFD).Read(0x1932da4901c0, {0x1932dab5a000?, 0x2?, 0x7ff703001b3b?})
+	D:/Program Files/Go/src/net/fd_posix.go:68 +0x25
+net.(*conn).Read(0x1932da9c8030, {0x1932dab5a000?, 0x0?, 0x1932da5aff90?})
+	D:/Program Files/Go/src/net/net.go:196 +0x45
+github.com/SxAllyn/zpt/internal/outbound/zop.TestZopLargeDataTransfer.func3()
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:313 +0x19b
+created by github.com/SxAllyn/zpt/internal/outbound/zop.TestZopLargeDataTransfer in goroutine 7
+	E:/Users/Administrator/Desktop/Zpt/zpt-core/internal/outbound/zop/zop_stress_test.go:310 +0xa5e
+FAIL	github.com/SxAllyn/zpt/internal/outbound/zop	60.638s
+FAIL
