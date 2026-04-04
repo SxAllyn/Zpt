@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -315,6 +316,7 @@ func (h *http3Transport) Write(p []byte) (n int, err error) {
 		fmt.Printf("[HTTP3-WRITE-CLOSED] 实例 %p 已关闭\n", h)
 		return 0, io.ErrClosedPipe
 	}
+	fmt.Fprintf(os.Stderr, "[HTTP3-WRITE-DEBUG] 进入Write方法，len=%d\n", len(p))
 	sent := h.sentBytes.Load()
 	window := h.windowSize.Load()
 	available := window - sent
@@ -958,7 +960,14 @@ func (h *http3Transport) processIncomingFrames() error {
 
 	// 如果缓冲区变得很小，考虑缩减容量以节省内存
 	if cap(h.rawBuffer) > 65536 && len(h.rawBuffer) < cap(h.rawBuffer)/4 {
-		newBuf := GetBuffer(len(h.rawBuffer) * 2)
+		newSize := len(h.rawBuffer) * 2
+		newBuf := GetBuffer(newSize)
+		if cap(newBuf) < len(h.rawBuffer) {
+			// 缓冲区容量不足，直接分配
+			fmt.Printf("[HTTP3-BUFFER-RESIZE-WARN] 请求大小=%d, 获取容量=%d, 需要=%d, 使用直接分配\n",
+				newSize, cap(newBuf), len(h.rawBuffer))
+			newBuf = make([]byte, len(h.rawBuffer), newSize*2)
+		}
 		copy(newBuf, h.rawBuffer)
 		PutBuffer(h.rawBuffer[:cap(h.rawBuffer)])
 		h.rawBuffer = newBuf[:len(h.rawBuffer)]
@@ -969,6 +978,7 @@ func (h *http3Transport) processIncomingFrames() error {
 
 // writeDataFrameZeroCopy 使用零拷贝技术写入数据帧
 func (h *http3Transport) writeDataFrameZeroCopy(data []byte) error {
+	fmt.Fprintf(os.Stderr, "[HTTP3-WRITE-ZEROCOPY-DEBUG] 进入零拷贝写入，len=%d\n", len(data))
 	const maxFrameSize = 65535 // HTTP/3数据帧最大长度
 
 	offset := 0
